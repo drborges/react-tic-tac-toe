@@ -50,6 +50,8 @@ ReactDOM.render(app, document.getElementById("root"))
 
 The `JSX` is the declarative portion of the lib. It's not really HTML, but rather, an extension of the JS language. You can think of it as being a templating language, and it's how we'll describe UI elements;
 
+See [JSX in Depth](https://reactjs.org/docs/jsx-in-depth.html) to dig further.
+
 ### Component-Based
 
 ```jsx
@@ -70,7 +72,7 @@ Components are simply JavaScript functions that:
 
 1. Return `JSX` code describing how that component should look like;
 2. Can optionally receive data via its first argument, called `Props`; Props passed into the component can be used to drive what the current structure of the component should be, e.g., conditionally render portions of the JSX, toggle CSS classes on JSX elements, populate portions of the UI with data, etc...
-3. Most components don't hold "internal state", and behave like pure functions, e.g. all the data they need are provided via props, and given the same set of props, we always have the same output. These are known as stateless components. We'll talk about stateful components later on.
+3. Most components don't hold "internal state", and behave like pure functions, e.g. all the data they need is provided via props, and given the same set of props, we always have the same output. These are known as stateless components. We'll talk about stateful components later on.
 
 ### Learn Once, Write Everywhere
 
