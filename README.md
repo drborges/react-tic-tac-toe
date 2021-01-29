@@ -339,7 +339,10 @@ export function Counter({ initialCount = 0 }) {
 </p>
 </details>
 
-Make sure you are aware of the [Rule of Hooks](https://reactjs.org/docs/hooks-rules.html) before moving forward :)
+**Tips:**
+
+1. Make sure you are aware of the [Rule of Hooks](https://reactjs.org/docs/hooks-rules.html)
+2. Don't be shy, abstract your application logic into as many custom hooks as it possibly makes sense. That will not only help you organize and test your code, but will provide meaningful abstractions that will improve even the communication within your team, as you may have already realized, it's a lot simpler to talk in terms of abstractions than line numbers :)
 
 ### Managing the Board State
 
