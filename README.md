@@ -1,466 +1,508 @@
-# React by Example: Tic-tac-toe Game
-
-Learn React by doing it.
-
-This repo provides the reference code used by the short tutorial below. [Check out this Codesandbox](https://codesandbox.io/s/react-tic-tac-toe-egbnq?file=/src/index.jsx) to see the game in action along with its source code.
+# React By Example: Tic Tac Toe Game
 
 <p align="center">
-  <img width="50%" alt="tic tac toe demo" src="docs/images/tic-tac-toe-demo.gif" />
+  <a href="https://egbnq.csb.app">
+    <img width="420" alt="tic tac toe demo" src="docs/images/tic-tac-toe-demo.gif" />
+  </a>
 </p>
 
 ## Table of Contents
 
-- [What's React](#whats-react)
-- [What's a React Component?](#whats-a-react-component)
-  - [Stateless Components](#stateful-components)
-    - [Basic Component Structure](#basic-component-structure)
-    - [Children Elements](#children-elements)
-  - [Styling Components](#styling-components)
-  - [Thinking in React](#thinking-in-react)
-  - [Stateful Components](#stateful-components)
-  - [Custom Hooks: Reusable Application Logic](#custom-hooks-reusable-application-logic)
-  - [Component Lifecycle](#component-lifecycle)
-    - [The Mount Phase](#the-mount-phase)
-    - [The Update Phase](#the-update-phase)
-    - [The Unmount Phase](#the-unmount-phase)
-    - [Hooking Into the Lifecycle](#hooking-into-the-lifecycle)
-  - [Accessing Application Data Through Context]()
-  - [Optimizations](#optimizations)
-    - [Memoizing Callbacks](#memoizing-callbacks)
-    - [Memoizing Expensive Computations](#memoizing-expensive-computations)
-    - [Preventing Unnecessary Rendering](#prevent-unnecessary-rendering-cycles)
-  - [Resources](#resources)
+- [Hello World](#hello-world)
+  - [Declarative](#declarative)
+  - [Component-Based](#component-based)
+  - [Learn Once, Write Everywhere](#learn-once-write-everywhere)
+- [Thinking in React](#thinking-in-react)
+- [Game Structure Prototype](#game-structure-prototype)
+  - [The Game Component](#the-game-component)
+  - [The Text Component](#the-text-component)
+  - [The Card Component](#the-card-component)
+  - [The Button Component](#the-button-component)
+  - [The Board Component](#the-board-component)
+  - [The Cell Component](#the-cell-component)
+- [State and Application Logic](#state-and-application-logic)
+  - [Managing the Board State](#managing-the-board-state)
+  - [Managing the Game Rules](#managing-the-game-rules)
+  - [Implementing-the-timer](#implementing-the-timer)
+- [Optimizations](#optimizations)
+- [Code Organization](#code-organization)
+- [References](#references)
 
-## What's React?
+## Hello World
 
-[React](https://reactjs.org/) is A JavaScript library for building user interfaces, it's `declarative` and `component` based.
+[React.js](https://reactjs.org/) follows three basic foundational values:
 
-Developers can simply describe what the UI should look like by creating and composing components together, and React takes care of rendering these components to the target platform (DOM, iOS, Android, Shell, etc...) in the most efficent way possible.
+1. Declarative;
+2. Component-based;
+3. Learn once, write anywheree.
 
-## What's a React Component?
-
-1. The basic building block in the React ecosystem;
-2. It's simply a JS function (for the most part 😅);
-3. Can optionally receive data via its first argument, known as `props`;
-4. Return markup code that looks a lot like HTML, known as `JSX`;
-5. Can be stateless or statefull;
-
-## Stateless Components
-
-Stateless components are the simplest form of a React component.They can optionally receive data via `props` and returns JSX code that describes the UI requirements of the component. They do not hold internal state, therefore, stateless components.
-
-This type of component can be treated as a pure function, where given the same input, e.g. `props` we always get the same `JSX` output.
-
-### Basic Component Structure
-
-_/src/index.js_
-
-```jsx
-import ReactDOM from "react-dom"
-
-function Greeting(props) {
-  return <h1>Hello {props.name}!</h1>
-}
-
-ReactDOM.render(<Greeting name="Create 2021.1" />, document.getElementById("root"))
-```
-
-As it may already be obivious, the `name` attribute above is accessible within the component's function definition through its `props` argument. This usage will render the following to the DOM:
-
-```html
-<h1>Hello Create 2021.1!</h1>
-```
-
-### Children Elements
-
-React components can also wrap children elements, which are made accessible via the `props` argument, just like any other regular prop passed to the component. Children elements can be **any** type of React expression, that being built-in tags such as `div` and `p`, a text node, or other components.
-
-Let's imagine a `Card` component that can be used as a container to hold any number of children elements. This is what it could look like:
-
-_/src/index.js_
-
-```jsx
-import ReactDOM from "react-dom"
-
-function Card(props) {
-  return (
-    <div>{props.children}</div>
-  )
-}
-
-const app = (
-  <Card>
-    <Greeting name="Alice" />
-    {"Look! I'm a text node!}
-    <Greeting name="Bob" />
-    <p>now with built-in tags...</p>
-  </Card>
-)
-
-ReactDOM.render(
-  app,
-  document.getElementById("root"),
-)
-```
-
-## Styling Components
-
-React Components [can be styled in various ways](https://reactjs.org/docs/faq-styling.html), here're the three most common ones:
-
-1. Declarativelly, with regular CSS by passing class names to the component via the `className` prop;
-2. Programatically, by passing a JS object containing CSS properties to thee component via the `style`props;
-3. Using [CSS Modules](https://css-tricks.com/css-modules-part-1-need/) to provide CSS code scoped to your component, preventing issues like CSS leaking throughout the app;
-
-Let's see how we'd style our `Greeting` component using all three strategies:
-
-<details><summary>Plain CSS</summary>
-
-_/src/styles.css_
-
-```css
-.greeting {
-  color: green;
-}
-```
-
-_/src/index.js_
+### Declarative
 
 ```jsx
 import ReactDOM from "react-dom"
 
 import "./styles.css"
 
-function Greeting(props) {
-  return <h1 className="greeting">Hello {props.name}!</h1>
-}
+const app = <h1>Hello World</h1>
 
-ReactDOM.render(<Greeting name="Create 2021.1" />, document.getElementById("root"))
+ReactDOM.render(app, document.getElementById("root"))
 ```
 
-</details>
+The `JSX` is the declarative portion of the lib. It's not really HTML, but rather, an extension of the JS language. You can think of it as being a templating language, and it's how we'll describe UI elements;
 
-<details><summary>Style Prop</summary>
-
-_/src/index.js_
+### Component-Based
 
 ```jsx
 import ReactDOM from "react-dom"
 
-function Greeting(props) {
-  const css = { color: "green" }
-  return <h1 style={css}>Hello {props.name}!</h1>
+import "./styles.css"
+
+function Greeting({ value }) {
+  return <div className="Greeting">{value}</div>
 }
 
-ReactDOM.render(<Greeting name="Create 2021.1" />, document.getElementById("root"))
+const app = <Greeting value="Hello World" />
+
+ReactDOM.render(app, document.getElementById("root"))
 ```
 
-</details>
+Components are simply JavaScript functions that:
 
-<details><summary>CSS Modules</summary>
+1. Return `JSX` code describing how that component should look like;
+2. Can optionally receive data via its first argument, called `Props`; Props passed into the component can be used to drive what the current structure of the component should be, e.g., conditionally render portions of the JSX, toggle CSS classes on JSX elements, populate portions of the UI with data, etc...
+3. Most components don't hold "internal state", and behave like pure functions, e.g. all the data they need are provided via props, and given the same set of props, we always have the same output. These are known as stateless components. We'll talk about stateful components later on.
 
-_/src/styles.module.css_
+### Learn Once, Write Everywhere
 
-```css
-.greeting {
-  color: green;
-}
-```
+React can be written and rendered to differet platforms using different renderers. `ReactDOM` is the engine used to render React apps to HTML, but there are projects that provided renderers for other "environments", here're a few:
 
-_/src/index.js_
-
-```jsx
-import ReactDOM from "react-dom"
-
-import styles from "./styles.module.css"
-
-function Greeting(props) {
-  return <h1 className={styles.greeting}>Hello {props.name}!</h1>
-}
-
-ReactDOM.render(<Greeting name="Create 2021.1" />, document.getElementById("root"))
-```
-
-</details>
+1. [React Native](https://reactnative.dev/): Render React code to iOS or Andoid platforms;
+2. [React Three Fiber](https://github.com/pmndrs/react-three-fiber): React renderer for [threejs](https://threejs.org/) on the web and react-native;
+3. [Ink](https://github.com/vadimdemedes/ink): React renderer for terminal apps.
 
 ## Thinking in React
 
-When building apps with React (or any component driven lib for that matter), it is often useful (and a good practice) to break down the UI into simpler abstractions, where each abstraction can be implemented by its own React component and later composed together to form the final result. Think LEGO bricks 👌🏾
+1. Break down your UI/mockup into smaller building blocks that can be implemented as React components;
+1. Compose them together to build the final prototype matching the mockup;
+1. Add application logic (usually, bettere placed in the root component).
 
-Here's one way to break down the Tic-Tac-Toe app into smaller building blocks:
-
-<p align="center">
-  <img width="50%" alt="Thinking in React" src="docs/images/app-thinking-in-react.png" />
-</p>
-
-1. `Game` component: It's the root component of our app, the entrypoint. This is going to be our stateful component, responsible for holding the game state;
-2. `Card` component, implements the card container;
-3. `Text` component, implements an abstraction of text elements so we can encapsulate app specific styles and reuse throughout the app;
-4. `Board` component, implements the Tic-Tac-Toe board;
-5. `Cell` component, implements the board cells as buttons that the user can click on in order to make a move;
-6. `Button` component, very much like the `Text` component, this one will encapsulate app specific styles and so it can be reused throughout the app;
-
-As you may have noticed, the structure of a React app, very much like the HTML DOM, is a tree. Here's what our Components Tree will look like:
+Learn more about the Thinking in React mindset [here](https://reactjs.org/docs/thinking-in-react.html).
 
 <p align="center">
-  <img alt="Components Tree" src="docs/images/tic-tac-toe-components-tree.png" />
+  <img width="420" alt="tic-tac-toe-components" src="docs/images/thinking-in-react.png">
 </p>
 
-The [Thinking in React article](https://reactjs.org/docs/thinking-in-react.html) covers this topic in more detail, and it's a must read resource for anyone working with this type of UI development paradigm.
+## Game Structure Prototype
 
-## Stateful Components
+The pseudo code below gives an idea of how we can structure our app in terms of the component abstractions we just went over.
 
-As opposed to steteless components, stateful components do hold internal state that can be combined with its `props` in order to drive the construction of the JSX markup, e.g., conditionally render elements to the screen, toggle css classes on elements as a result of user interaction, hold user input, etc...
+```jsx
+1: <Game>:
+  2: <Card>
+    3: <Text variant="title" value="Tic Tac Toe" />
+    3: <Text value="Currently Playing: circle (6s)" />
 
-Internal state can be created using the `useState` React hook function, and this is one of the many built-in [hooks](https://reactjs.org/docs/hooks-intro.html) provided by React that we'll rely on in order to control our components' internal state, create reusable stateful logic, and hook into the component lifecycle. Hooks simply put, are:
+    4: <Board>
+      5: <Cell />
+      5: <Cell />
+      5: <Cell />
 
-1. Functions whose names start with `use`;
-2. May call other hooks;
-3. Can't be conditionally executed, nor can't be called within callbacks. Learn more about [Rules of Hooks heres](https://reactjs.org/docs/hooks-rules.html)
+      5: <Cell />
+      5: <Cell />
+      5: <Cell />
 
-Let's build a `Counter` app to see this in action!
+      5: <Cell />
+      5: <Cell />
+      5: <Cell />
+    </Board>
 
-_/src/index.js_
+    3: <Text value="Winner: N/A. Moves Left: 4" />
+    6: <Button>Reset Game</Butotn>
+  </Card>
+```
+
+### The Game Component
+
+What do we know about this component?
+
+- [ ] It’s the root of our application
+- [ ] Will be responsible for encapsulating the state and application logic of our app and pass data down to other components via their props
+- [ ] But for now… it will simply encapsulate all our game structure
+
+<details><summary>Result</summary>
+<p>
+
+```jsx
+export function Game() {
+  return (
+    <Card>
+      <Text value="Tic Tac Toe" variant="title" />
+      <Text value="Currently Playing: circle (4s)" />
+      <Board>
+        <Cell />
+        <Cell />
+        <Cell />
+        <Cell />
+        <Cell />
+        <Cell />
+        <Cell />
+        <Cell />
+        <Cell />
+      </Board>
+      <Text value="Winner: N/A. Moves Left: 9" />
+      <Button>Reset Game</Button>
+    </Card>
+  )
+}
+```
+
+</p>
+</details>
+
+### The Text Component
+
+- [ ] Should support two styles:
+  - [ ] One to be used for the “Tic Tac Toe” title
+  - [ ] Another for the rest of the text used in the App
+
+<details><summary>Result</summary>
+<p>
+
+```jsx
+export function Text({ value, variant }) {
+  const Tag = variant === "title" ? "h1" : "p"
+  return <Tag>{value}</Tag>
+}
+```
+
+</p>
+</details>
+
+### The Card Component
+
+- [ ] It will define the boundaries of our app, e.g. container holding the app title, match info, game board, game statistics, etc...
+- [ ] Gets scaled up a bit when the game is over
+
+<details><summary>Result</summary>
+<p>
+
+```jsx
+import classnames from "classnames"
+
+import "./card.css"
+
+export function Card({ children, zoomed = false }) {
+  const css = classnames("Card", {
+    zoomed,
+  })
+
+  return <div className={css}>{children}</div>
+}
+```
+
+</p>
+</details>
+
+### The Button Component
+
+- [ ] Should decorate the native button element with our custom style
+- [ ] Should still provide all the built-in capabilities of a button
+
+<details><summary>Result</summary>
+<p>
+
+```jsx
+import "./button.css"
+
+export function Button({ children, onClick, ...props }) {
+  return (
+    <button {...props} className="Button" onClick={onClick}>
+      {children}
+    </button>
+  )
+}
+```
+
+</p>
+</details>
+
+### The Board Component
+
+What do we know about this component?
+
+- [ ] It needs to render the board
+- [ ] It will take cell elements as its children elements
+
+<details><summary>Result</summary>
+<p>
+
+```jsx
+import "./board.css"
+
+export function Board({ children }) {
+  return <div className="Board">{children}</div>
+}
+```
+
+</p>
+</details>
+
+### The Cell Component
+
+What do we know about this component?
+
+- [ ] Should be clickable
+- [ ] Should support keyboard navigation
+- [ ] Can be empty
+- [ ] Can be taken by a player, either a “circle” or a “cross”
+- [ ] Is highlighted in bold red when the cell belongs to a winning move
+- [ ] Should be disabled when:
+  1. [ ] taken
+  2. [ ] highlighted (belongs to a winning move)
+  3. [ ] the game is over
+- [ ] Should allow for a callback to be passed in so it is executed when the cell is clicked, informing the position of the cell within the board
+
+<details><summary>Result</summary>
+<p>
+
+```jsx
+import { useContext } from "react"
+import classnames from "classnames"
+
+import "./cell.css"
+
+export function Cell({ row, col, takenBy, onTake, highlighted, gameOver }) {
+  const css = classnames("Cell", {
+    [takenBy]: takenBy,
+    highlighted,
+  })
+
+  return (
+    <button
+      className={css}
+      disabled={takenBy || highlighted || gameOver}
+      onClick={() => onTake(row, col)}
+    />
+  )
+}
+```
+
+</p>
+</details>
+
+## State and Application Logic
+
+So far, eventhough we have something that visually matches our mockup, our app does not do much. Now it's time to implement state management and application logic! Here's what we need:
+
+1. Track and manage the state of the board based on user interactions;
+2. Implement the game rules so the user can only do what's allowed as the game progresses;
+3. We'll also need a timer, so we can tell how long a match took.
+
+In order to achieve these requirements, we'll have to learn a little bit about [state management](https://reactjs.org/docs/hooks-state.html), [component-lifecycle](https://reactjs.org/docs/hooks-effect.html), and application logic abstraction. To see these concepts in action, let's go ahead and implement a simple `Counter` app.
+
+<details><summary>Result</summary>
+<p>
 
 ```jsx
 import { useState } from "react"
-import ReactDOM from "react-dom"
 
-function Counter({ initialCount }) {
+export function useCounter(initialCount = 0) {
   const [count, setCount] = useState(initialCount)
-  const decrement = () => setCount((currentCount) => currentCount - 1)
-  const increment = () => setCount((currentCount) => currentCount + 1)
+  const reset = () => setCount(initialCount)
+  const decrement = () => setCount((count) => count - 1)
+  const increment = () => setCount((count) => count + 1)
+
+  return {
+    count,
+    decrement,
+    increment,
+    reset,
+  }
+}
+
+export function Counter({ initialCount = 0 }) {
+  const { count, decrement, increment, reset } = useCounter(initialCount)
 
   return (
     <div>
-      <button onClick={decrement}>-1</button>
       {count}
+      <button onClick={decrement}>-1</button>
       <button onClick={increment}>+1</button>
+      <button onClick={reset}>Reset</button>
     </div>
   )
 }
-
-ReactDOM.render(<Counter initialCount={0} />, document.getElementById("root"))
 ```
 
-The `useState` hook takes as argument the initial value of the state being created and returns an array with two items. The first item is the current value of the state, and the second, an update function that can be used to update the state with new values causing the React component to re-render.
+</p>
+</details>
 
-Every time the `+1` button is clicked, the current cound is incremented by one and the React component is re-rendered so the new value is displayed. Similarly, clicking the `-1` button will cause the same process to take place, but decrementing the sate by one instead.
+### Managing the Board State
 
-With that, we have our first statefull React component 🎉.
+```js
+// prettier-ignore
+const { rows, take, reset } = useBoard([
+  [null, null, null],
+  [null, null, null],
+  [null, null, null],
+])
+```
 
-## Custom Hooks: Reusable Application Logic
+We'll be implementing a new custom hook `useBoard` that will allow us to:
 
-Often times application logic grows too much that keeping all of it within your component starts to hurt code readability, making it a real challenge to maintain the codebase. Thankfully, React allows us to create custom hooks, which is a great way to encapsulate code and provide reusable application logic.
+- [ ] Dynamically initialize the board using a data structure (rather than hardcoding cells like we've been doing)
+- [ ] Update the board state as users make moves
+- [ ] Reset the board when the `Reset Game` button is clicked
 
-Taking our Counter app as an example, we can extract the stateful logic into a custom hook and reuse it in the React component:
+<details><summary>Result</summary>
+<p>
 
 ```jsx
-import ReactDOM from "react-dom"
 import { useState } from "react"
 
-function useCounter(initialCount) {
-  const [count, setCount] = useState(initialCount)
-  const decrement = () => setCount((currentCount) => currentCount - 1)
-  const increment = () => setCount((currentCount) => currentCount + 1)
+export function useBoard(initialState) {
+  const [board, setBoard] = useState(initialState)
+  const reset = () => setBoard(initialState)
+  const take = (row, col, takenBy) => {
+    board[row][col] = takenBy
+    setBoard([...board])
+  }
 
   return {
-    count,
-    decrement,
-    increment,
+    board,
+    take,
+    reset,
   }
 }
-
-function Counter({ initialCount }) {
-  const { count, decrement, increment } = useCounter(initialCount)
-
-  return (
-    <div>
-      <button onClick={decrement}>-1</button>
-      {count}
-      <button onClick={increment}>+1</button>
-    </div>
-  )
-}
-
-ReactDOM.render(<Counter initialCount={0} />, document.getElementById("root"))
 ```
 
-## Component Lifecycle
-
-React Components usually have the following lifecycle:
-
-<p align="center">
-  <img alt="lifecycle" src="docs/images/lifecycle-phases.png" />
 </p>
+</details>
 
-Let's run our `Counter` app through this diagram and see how that progresses:
+### Managing the Game Rules
 
-### The `Mount` Phase
+```js
+// prettier-ignore
+const {
+  currentPlayer,
+  nextPlayer,
+  winner,
+  isGameOver,
+  movesLeft,
+} = useJudge(boardState)
+```
 
-<p align="center">
-  <img alt="mount phase" src="docs/images/mount-phase.png" />
-</p>
+The `useJudge` custom hook should provide an abstraction of a game judge, encapsulating logic to implement the game rules. Its API should allow us to:
 
-This is the first step in the lifecycle, and it happens as soon as the component is rendered to the DOM (e.g. mounted) via `ReactDOM.render`
+- [ ] Access the current player (either "circle" or "cross")
+- [ ] Switch turns as players make moves
+- [ ] Compute a winner if one exists
+- [ ] Check if the game is over
+- [ ] Check how many moves are left
 
-### The `Update` Phase
-
-<p align="center">
-  <img alt="update phase" src="docs/images/update-phase.png" />
-</p>
-
-Executed whenever the component state is updated, in our case, whenever we click the `+1` or `-1` buttons. This phase can also run in a stateless child component if a stateful parent component updates, causing the child to re-render as well.
-
-### The `Unmount` Phase
-
-<p align="center">
-  <img alt="unmount phase" src="docs/images/unmount-phase.png" />
-</p>
-
-Executed when the component is removed from the DOM. During this phase, we can run clean up code to avoid memory leaking, things like canceling timers, unsubscribing from PubSub channels, etc...
-
-### Hooking Into the Lifecycle
-
-React allows us to write code that is bound to specific phases of the component's lifecycle via the [useEffect Hook](https://reactjs.org/docs/hooks-effect.html). This kind of code is also know as side-effects. Some of the use cases for this type of hook are:
-
-1. Fetch data asynchronously as soon as the component is mounted;
-1. Perform work as a result of some specific state change;
-1. Initiate a timer when the component is mounted;
-1. Subscribe and unsubscribe to pubsub events when the component is monted and unmounted respectively;
-
-Let's take the `Counter` app again as reference, and imagine that a hypothetical client asked you to implement a timer. This timer should simply show the user how many seconds have passed since the timer started. Luckly, we can reuse the `useCounter` hook implemented in the previous section to provide the application logic that will be used by a side-effect that runs every second. Here's a first attempt at implementing the `Timer` component:
+<details><summary>Result</summary>
+<p>
 
 ```jsx
-import ReactDOM from "react-dom"
-import { useEffect, useState } from "react"
+import { useState } from "react"
+import { countMovesLeft, findWinner } from "../helpers"
 
-function useCounter(initialCount) {
-  const [count, setCount] = useState(initialCount)
-  const decrement = () => setCount((currentCount) => currentCount - 1)
-  const increment = () => setCount((currentCount) => currentCount + 1)
+export function useJudge(board) {
+  const [currentPlayer, setCurrentPlayer] = useState("circle")
+  const movesLeft = () => countMovesLeft(board)
+  const noMovesLeft = movesLeft === 0
+  const winner = movesLeft > 4 ? null : findWinner(board)
+  const isGameOver = winner || noMovesLeft
+  const nextPlayer = () => {
+    const nextPlayer = currentPlayer === "circle" ? "cross" : "circle"
+
+    setCurrentPlayer(nextPlayer)
+  }
 
   return {
-    count,
-    decrement,
-    increment,
+    currentPlayer,
+    nextPlayer,
+    winner,
+    isGameOver,
+    movesLeft,
   }
 }
-
-function Timer({ initialCount }) {
-  const { count, increment } = useCounter(initialCount)
-
-  useEffect(() => {
-    setInterval(increment, 1000)
-  })
-
-  return <div>{count} seconds have passed.</div>
-}
-
-ReactDOM.render(<Timer initialCount={0} />, document.getElementById("root"))
 ```
 
-If we run the code we'll see that the timer does not behave as expected, and instead, the count will increases exponentially every second rather than one unit at a time. That's because `useEffect` runs every time the `Timer` component renders, creating a new instance of timer every second, each incrementing the count by one, every second. To prevent this behavior, we need a [cleanup phase](https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup) to take place and cancel the current timer before creating a new one. We can achieve that by returning a cleanup function from the effect that performs the cancellation of the timer:
+</p>
+</details>
+
+### Implementing the Timer
+
+```js
+// prettier-ignore
+const { count, reset, stop } = useTimer()
+```
+
+The `useTimer` custom hook will be responsible for managing the game timer, and will allow us to:
+
+- [ ] Access the current timer state
+- [ ] Reset the timer when the game is reset
+- [ ] Stop the timer when the game is over
+
+<details><summary>Result</summary>
+<p>
 
 ```jsx
-import ReactDOM from "react-dom"
-import { useEffect, useState } from "react"
+import { useEffect, useRef } from "react"
+import { useCounter } from "./useCounter"
 
-function useCounter(initialCount) {
-  const [count, setCount] = useState(initialCount)
-  const decrement = () => setCount((currentCount) => currentCount - 1)
-  const increment = () => setCount((currentCount) => currentCount + 1)
+export function useTimer() {
+  const timer = useRef()
+  const { count, increment, reset: resetCounter } = useCounter()
+  const stop = () => clearInterval(timer.current)
+  const reset = () => {
+    resetCounter()
+    timer.current = setInterval(increment, 1000)
+  }
+
+  useEffect(() => {
+    timer.current = setInterval(increment, 1000)
+    return stop
+  })
 
   return {
     count,
-    decrement,
-    increment,
+    reset,
+    stop,
   }
 }
-
-function Timer({ initialCount }) {
-  const { count, increment } = useCounter(initialCount)
-
-  useEffect(() => {
-    const timer = setInterval(increment, 1000)
-    return () => clearInterval(timer)
-  })
-
-  return <div>{count} seconds have passed.</div>
-}
-
-ReactDOM.render(<Timer initialCount={0} />, document.getElementById("root"))
 ```
 
-This works great for our purpose! However, the side-effect code still runs every second. We can optimize that behavior so that the side-effect runs only when absolutely needed. See [Memoizing Callbacks](#memoizing-callbacks) to learn more about this optimization.
-
-## Accessing Application Data Through Context
-
-useContext: TODO
+</p>
+</details>
 
 ## Optimizations
 
-### Memoizing Callbacks
+- [ ] Skipping unnecessary side-effects in the `useTimer` hook (memoizing exposed API through `useCallback`
+- [ ] Skipping expensive operations in `useJudge` hook (memoizing computation with `useMemo`
+- [ ] Skipping unnecessary renderings with `React.memo`
+- [ ] Avoid prop drilling with the context API (`<GameContext.Provider />` + `useContext`)
+- [ ] CSS Modules to avoid CSS leaking
 
-This version looks much better! However, eventhough the timer cleans after itself, it creates a new timer every second! It would be ideal if only one timer gets created for the duration of the component's lifespan. Well, `useEffect` to the rescue! We can pass as the second argument, a list of dependencies that will instruct React to run the side-effect when the component is mounted as well as whenever any of these dependencies change. In this case, the only dependency that the side-effect code has is the `increment` function:
+## Code Organization
 
-```jsx
-useEffect(() => {
-  const timer = setInterval(increment, 1000)
-  return () => clearInterval(timer)
-}, [increment])
-```
+React does not enforce any particular project structure, this is pretty much up to us. With that said, here's one I like to follow:
 
-There's a catch though, `useCounter` returns a new `increment` function whenever it runs, which will cause the side-effect to run every second just like before. To work around this, we can rely on another built-in hook, [`useCallback`](https://reactjs.org/docs/hooks-reference.html#usecallback), to "cache" the `increment` function, so the same instance is returned across update cycles, and only returning a new instance, if some dependency is updated (sounds familiar?). Here's what the more optimized code will look like:
+<p align="center">
+  <img width="397" alt="project structure collapsed" src="docs/images/dir-structure-1.png">
+</p>
 
-```jsx
-import ReactDOM from "react-dom"
-import { useCallback, useEffect, useState } from "react"
+<p align="center">
+  <img width="397" alt="project structure expanded" src="docs/images/dir-structure-2.png">
+</p>
 
-function useCounter(initialCount) {
-  const [count, setCount] = useState(initialCount)
-  const decrement = () => setCount((currentCount) => currentCount - 1)
-  const increment = useCallback(() => setCount((currentCount) => currentCount + 1), [setCount])
+## References
 
-  return {
-    count,
-    decrement,
-    increment,
-  }
-}
-
-function Timer({ initialCount }) {
-  const { count, increment } = useCounter(initialCount)
-
-  useEffect(() => {
-    const timer = setInterval(increment, 1000)
-    console.log("Running Side-Effect only once...")
-    return () => clearInterval(timer)
-  }, [increment])
-
-  return <div>{count} seconds have passed.</div>
-}
-
-ReactDOM.render(<Timer initialCount={0} />, document.getElementById("root"))
-```
-
-Two things happened here:
-
-1. We've imported `useCallback` from the `react` package;
-1. We've wrapped the `increment` function definition with `useCallback`, passing `setCount` as its only dependency.
-
-These changes ensure that the side-effect code in the `Timer` component only executes when the `increment` function changes and since that in our example, `setCount` does not change across updates, the side-effect code will run only once.
-
-### Memoizing Expensive Computations
-
-useMemo: TODO
-
-### Preventing Unnecessary Rendering
-
-React.memo: TODO
-
-## Resources
-
-- [React Docs](https://reactjs.org/docs/getting-started.html)
-- [Hooks Docs](https://reactjs.org/docs/hooks-intro.html)
-- [Thinking in React](https://reactjs.org/docs/thinking-in-react.html)
-- [The Beginner's Guide to React](https://egghead.io/courses/the-beginner-s-guide-to-react)
+1. [React Official Website](https://reactjs.org/)
+1. [React Docs: Main Concepts Guide](https://reactjs.org/docs/hello-world.html)
+1. [React Docs: JSX in Depth](https://reactjs.org/docs/jsx-in-depth.html)
+1. [React Docs: Introducing Hooks](https://reactjs.org/docs/hooks-intro.html)
+1. [React Docs: Advanced Guides](https://reactjs.org/docs/accessibility.html)
+1. [Talk: Introducing Hooks, by Dan Abramov](https://youtu.be/dpw9EHDh2bM)
+1. [Free Egghead Course: The Beginner's Guide to React, by Kent C. Dodds](https://egghead.io/courses/the-beginner-s-guide-to-react)
