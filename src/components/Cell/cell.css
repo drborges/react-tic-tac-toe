@@ -1,0 +1,35 @@
+.Cell {
+  border: none;
+  padding: 20px;
+  font-size: 50px;
+  font-family: sans-serif;
+  background-color: transparent;
+  transition: all 0.3s ease-in;
+}
+
+.Cell:hover {
+  cursor: pointer;
+  background-color: #eeeaaa;
+}
+
+.Cell:disabled {
+  cursor: default;
+}
+
+.Cell:disabled:hover {
+  background-color: transparent;
+}
+
+.Cell.highlighted {
+  color: red;
+  font-weight: bold;
+  outline: blue;
+}
+
+.Cell.circle:after {
+  content: "O";
+}
+
+.Cell.cross:after {
+  content: "X";
+}
