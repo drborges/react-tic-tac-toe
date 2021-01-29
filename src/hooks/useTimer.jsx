@@ -18,8 +18,8 @@ export function useTimer() {
 
   useEffect(() => {
     timer.current = setInterval(increment, 1000)
-    return () => clearInterval(timer)
-  }, [increment])
+    return stop
+  }, [increment, stop])
 
   return {
     count,

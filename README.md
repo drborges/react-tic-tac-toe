@@ -479,7 +479,48 @@ export function useTimer() {
 
 ## Optimizations
 
-- [ ] Skipping unnecessary side-effects in the `useTimer` hook (memoizing exposed API through `useCallback`
+### Skipping Unnecessary Side-Effects
+
+Our `useTimer` hook currently does the job apparently well enough. However, taking a closer look, we can see that a new timer is created every second, causing the timer to be delayed as users make moves on the board.
+
+That happens because our side-effect is configured to run when the component is mounted, as well as whenever it gets updated due to state changes.
+
+To solve this, we can pass a list of dependencies to `useEffect` signaling that the side-effect code, should only run when the component is mounted or any of its dependencies have their reference changed. Dependencies in this case, are simply variable references defined outside the effect function, that can have their memory reference updated.
+
+In our example, the side-effect depends on two variables: `increment` and `stop`.
+
+<details><summary>Result</summary>
+<p>
+
+```jsx
+import { useEffect, useRef } from "react"
+import { useCounter } from "./useCounter"
+
+export function useTimer() {
+  const timer = useRef()
+  const { count, increment, reset: resetCounter } = useCounter()
+  const stop = () => clearInterval(timer.current)
+  const reset = () => {
+    resetCounter()
+    timer.current = setInterval(increment, 1000)
+  }
+
+  useEffect(() => {
+    timer.current = setInterval(increment, 1000)
+    return stop
+  })
+
+  return {
+    count,
+    reset,
+    stop,
+  }
+}
+```
+
+</p>
+</details>
+
 - [ ] Skipping expensive operations in `useJudge` hook (memoizing computation with `useMemo`
 - [ ] Skipping unnecessary renderings with `React.memo`
 - [ ] Avoid prop drilling with the context API (`<GameContext.Provider />` + `useContext`)

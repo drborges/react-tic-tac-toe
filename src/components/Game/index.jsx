@@ -75,21 +75,16 @@ export function Game() {
     [winner, isGameOver],
   )
 
+  const currentlyPlaying = isGameOver ? "N/A" : currentPlayer
+  const winnerResult = isGameOver ? winner?.player || "Draw" : "N/A"
+
   return (
     <GameContext.Provider value={context}>
       <Card scaled={isGameOver}>
         <Text value="Tic Tac Toe" variant="title" />
-        <Text
-          value={`Curenlty Playing: ${
-            isGameOver ? "N/A" : currentPlayer
-          } (${count}s)`}
-        />
+        <Text value={`Curenlty Playing: ${currentlyPlaying} (${count}s)`} />
         <GameBoard rows={rows} onMakeMove={makeMove} />
-        <Text
-          value={`Winner: ${
-            winner ? winner.player : "N/A"
-          }. Moves Left: ${movesLeft}`}
-        />
+        <Text value={`Winner: ${winnerResult}. Moves Left: ${movesLeft}`} />
         <Button onClick={resetGame}>Reset Game</Button>
       </Card>
     </GameContext.Provider>
